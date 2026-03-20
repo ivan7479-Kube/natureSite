@@ -23,6 +23,26 @@
             <img src="images/nature2.jpg" alt="Nature 2">
             <img src="images/nature3.jpg" alt="Nature 3">
         </div>
+		<div>
+		<button onclick="purgeCache()">Purge Cache</button>
+
+<script>
+function purgeCache() {
+  fetch("https://your-worker-url.workers.dev?key=YOUR_SECRET_KEY", {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Cache purged successfully!");
+    console.log(data);
+  })
+  .catch(err => {
+    alert("Error purging cache");
+    console.error(err);
+  });
+}
+</script>
+		</div>
     </main>
 
     <footer>
