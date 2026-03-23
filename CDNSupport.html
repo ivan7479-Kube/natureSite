@@ -34,5 +34,37 @@ function purgeCache() {
   });
 }
 </script>
+
+<button id="purgeUrlButton">Purge URL</button>
+<div id="urlResponse"></div>
+
+<script>
+const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; // replace with your Worker URL
+const SECRET_KEY = "Purge"; // matches env.SECRET_KEY
+
+document.getElementById('purgeUrlButton').addEventListener('click', async () => {
+    const path = document.getElementById('purgeUrlInput').value.trim();
+    if (!path) {
+        document.getElementById('urlResponse').textContent = "Please enter a URL path to purge.";
+        return;
+    }
+
+    document.getElementById('urlResponse').textContent = "Sending purge request...";
+
+    try {
+        const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ path })
+        });
+
+        const data = await res.json();
+        document.getElementById('urlResponse').textContent = `Purge result: ${JSON.stringify(data)}`;
+    } catch (err) {
+        console.error(err);
+        document.getElementById('urlResponse').textContent = "Error sending purge request. Check console.";
+    }
+});
+</script>
 </body>
 </html>
