@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDN Support</title>
-    <link rel="stylesheet" href="styles.css"> <!-- your existing CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- your existing CSS -->
 </head>
 <body>
     <header>
@@ -17,16 +17,7 @@
         </nav>
     </header>
 
-    <main>
-        <h2>Clear Cache for CDN</h2>
-        <p>Use the buttons below to clear cache for different CDNs:</p>
 
-        <button id="clearFastly">Clear Fastly Cache</button>
-        <button id="clearCloudflare">Clear Cloudflare Cache</button>
-        <div id="response"></div>
-    </main>
-
-    <script src="cdnSupport.js"></script>
 	<script>
 function purgeCache() {
   fetch("https://fastly-purge-api.ivan7479.workers.dev/?key=Purge", {
