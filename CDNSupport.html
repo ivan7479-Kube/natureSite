@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDN Support</title>
+    <link rel="stylesheet" href="styles.css"> <!-- your existing CSS -->
+</head>
+<body>
+    <header>
+        <h1>CDN Support</h1>
+        <nav>
+            <a href="index.html">Home</a> |
+			<a href="blog.html">Blog</a>
+            <a href="careers.html">Careers</a>
+            <a href="CDNSupport.html">CDN Support</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Clear Cache for CDN</h2>
+        <p>Use the buttons below to clear cache for different CDNs:</p>
+
+        <button id="clearFastly">Clear Fastly Cache</button>
+        <button id="clearCloudflare">Clear Cloudflare Cache</button>
+        <div id="response"></div>
+    </main>
+
+    <script src="cdnSupport.js"></script>
+	<script>
+function purgeCache() {
+  fetch("https://fastly-purge-api.ivan7479.workers.dev/?key=Purge", {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Cache purged successfully!");
+    console.log(data);
+  })
+  .catch(err => {
+    alert("Error purging cache");
+    console.error(err);
+  });
+}
+</script>
+</body>
+</html>
