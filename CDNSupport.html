@@ -34,13 +34,17 @@ function purgeCache() {
   });
 }
 </script>
-
+<h3>Purge by URL</h3>
+<p>Enter the URL path to purge (e.g., /careers.html):</p>
+<input type="text" id="purgeUrlInput" placeholder="/careers.html">
+<button id="purgeUrlButton">Purge URL</button>
+<div id="urlResponse"></div>
 <button id="purgeUrlButton">Purge URL</button>
 <div id="urlResponse"></div>
 
 <script>
-const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; // replace with your Worker URL
-const SECRET_KEY = "Purge"; // matches env.SECRET_KEY
+const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; 
+const SECRET_KEY = "Purge"; 
 
 document.getElementById('purgeUrlButton').addEventListener('click', async () => {
     const path = document.getElementById('purgeUrlInput').value.trim();
