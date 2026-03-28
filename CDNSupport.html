@@ -86,8 +86,6 @@ document.getElementById('purgeUrlButton').addEventListener('click', async () => 
 <div id="surrogateResponse"></div>
 
 <script>
-const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; 
-const SECRET_KEY = "Purge"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById('surrogateKeyButton');
@@ -131,8 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <button id="multiKeyButton">Purge Multiple Keys</button>
 <div id="multiResponse"></div>
 <script>
-const WORKER_URL = "https://purge-url.ivan7479.workers.dev/";
-const SECRET_KEY = "Purge";
 
 document.getElementById('multiKeyButton').addEventListener('click', async () => {
     let keys = document.getElementById('multiKeyInput').value.trim();
