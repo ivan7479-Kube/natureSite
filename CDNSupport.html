@@ -16,6 +16,7 @@
             <a href="CDNSupport.html">CDN Support</a>
         </nav>
     </header>
+	<h3>Purge All Cache</h3>
 
 		<button onclick="purgeCache()">Purge Cache</button>
 	<script>
@@ -70,5 +71,106 @@ document.getElementById('purgeUrlButton').addEventListener('click', async () => 
     }
 });
 </script>
+
+<h3>Purge by Surrogate Key</h3>
+<p>Enter a surrogate key to purge:</p>
+<input type="text" id="surrogateKeyInput" placeholder="e.g., product-123">
+<button id="surrogateKeyButton">Purge Key</button>
+<div id="surrogateResponse"></div>
+
+<script>
+const WORKER_URL = "https://purge-url.ivan7479.workers.dev"; 
+const SECRET_KEY = "Purge"; 
+
+document.getElementById('surrogateKeyButton').addEventListener('click', async () => {
+    const key = document.getElementById('surrogateKeyInput').value.trim();
+
+    if (!key) {
+        document.getElementById('surrogateResponse').textContent = "Enter a surrogate key.";
+        return;
+    }
+
+    document.getElementById('surrogateResponse').textContent = "Sending request...";
+
+    try {
+        const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                type: "surrogate",
+                key
+            })
+        });
+
+        const data = await res.json();
+        document.getElementById('surrogateResponse').textContent =
+            `Result: ${JSON.stringify(data)}`;
+    } catch (err) {
+        console.error(err);
+        document.getElementById('surrogateResponse').textContent =
+            "Error sending purge request.";
+    }
+});
+</script>
+
+
+<h3>Purge Multiple Surrogate Keys</h3>
+<p>Enter multiple keys separated by commas:</p>
+<input type="text" id="multiKeyInput" placeholder="key1,key2,key3">
+<button id="multiKeyButton">Purge Multiple Keys</button>
+<div id="multiResponse"></div>
+<script>
+const WORKER_URL = "https://purge-url.ivan7479.workers.dev";
+const SECRET_KEY = "Purge";
+
+document.getElementById('multiKeyButton').addEventListener('click', async () => {
+    let keys = document.getElementById('multiKeyInput').value.trim();
+
+    if (!keys) {
+        document.getElementById('multiResponse').textContent = "Enter at least one surrogate key.";
+        return;
+    }
+
+    // 🔥 Convert comma-separated → space-separated (Fastly requirement)
+    keys = keys.split(',').map(k => k.trim()).filter(k => k).join(' ');
+
+    document.getElementById('multiResponse').textContent = "Sending purge request...";
+
+    try {
+        const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                type: "surrogate-multi",
+                keys
+            })
+        });
+
+        // Handle non-JSON responses safely
+        let data;
+        try {
+            data = await res.json();
+        } catch {
+            const text = await res.text();
+            throw new Error(text || "Invalid response from server");
+        }
+
+        if (!res.ok) {
+            document.getElementById('multiResponse').textContent =
+                `Error (${res.status}): ${JSON.stringify(data)}`;
+            return;
+        }
+
+        document.getElementById('multiResponse').textContent =
+            `Success: ${JSON.stringify(data)}`;
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById('multiResponse').textContent =
+            `Request failed: ${err.message}`;
+    }
+});
+</script>
+
 </body>
 </html>
