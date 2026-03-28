@@ -19,22 +19,10 @@
 	<h3>Purge All Cache</h3>
 
 		<button onclick="purgeCache()">Purge Cache</button>
-<script>
+	<script>
 function purgeCache() {
-  const path = document.getElementById('purgeUrlInput').value.trim();
-
-  if (!path) {
-    alert("Please enter a URL path to purge.");
-    return;
-  }
-
   fetch("https://fastly-purge-api.ivan7479.workers.dev/?key=Purge", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "url",
-      path
-    })
+    method: "POST"
   })
   .then(res => res.json())
   .then(data => {
@@ -44,7 +32,11 @@ function purgeCache() {
   .catch(err => {
     alert("Error purging cache");
     console.error(err);
-  });
+  })
+  body: JSON.stringify({
+    type: "url",
+    path
+});
 }
 </script>
 <h3>Purge by URL</h3>
@@ -56,7 +48,7 @@ function purgeCache() {
 <div id="urlResponse"></div>
 
 <script>
-const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; 
+const WORKER_URL = "https://purge-url.ivan7479.workers.dev"; 
 const SECRET_KEY = "Purge"; 
 
 document.getElementById('purgeUrlButton').addEventListener('click', async () => {
@@ -72,7 +64,10 @@ document.getElementById('purgeUrlButton').addEventListener('click', async () => 
         const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ path })
+            body: JSON.stringify({
+                type: "url",  // 🔹 Add this
+                path
+            })
         });
 
         const data = await res.json();
