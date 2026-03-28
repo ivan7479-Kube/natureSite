@@ -89,34 +89,38 @@ document.getElementById('purgeUrlButton').addEventListener('click', async () => 
 const WORKER_URL = "https://purge-url.ivan7479.workers.dev/"; 
 const SECRET_KEY = "Purge"; 
 
-document.getElementById('surrogateKeyButton').addEventListener('click', async () => {
-    const key = document.getElementById('surrogateKeyInput').value.trim();
+document.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById('surrogateKeyButton');
+    const input = document.getElementById('surrogateKeyInput');
+    const responseDiv = document.getElementById('surrogateResponse');
 
-    if (!key) {
-        document.getElementById('surrogateResponse').textContent = "Enter a surrogate key.";
-        return;
-    }
+    button.addEventListener('click', async () => {
+        const key = input.value.trim();
 
-    document.getElementById('surrogateResponse').textContent = "Sending request...";
+        if (!key) {
+            responseDiv.textContent = "Enter a surrogate key.";
+            return;
+        }
 
-    try {
-        const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                type: "surrogate",
-                key
-            })
-        });
+        responseDiv.textContent = "Sending request...";
 
-        const data = await res.json();
-        document.getElementById('surrogateResponse').textContent =
-            `Result: ${JSON.stringify(data)}`;
-    } catch (err) {
-        console.error(err);
-        document.getElementById('surrogateResponse').textContent =
-            "Error sending purge request.";
-    }
+        try {
+            const res = await fetch(`${WORKER_URL}?key=${SECRET_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    type: "surrogate",
+                    key
+                })
+            });
+
+            const data = await res.json();
+            responseDiv.textContent = `Result: ${JSON.stringify(data)}`;
+        } catch (err) {
+            console.error(err);
+            responseDiv.textContent = "Error sending purge request. Check console.";
+        }
+    });
 });
 </script>
 
